@@ -10,7 +10,6 @@ requirements = [
     'numpy',
     'jsonlines',
     'sentencepiece',
-    'pytorch_pretrained_bert'
 ]
 
 setup(
@@ -27,17 +26,22 @@ setup(
     classifiers=[
         "Natural Language :: English",
         "Intended Audience :: Science/Research",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "License :: OSI Approved :: MIT License",
     ],
-    python_requires=">3.5",
+    python_requires=">=3.8",
     install_requires=requirements,
     extras_require={
         "spacy": ["spacy"],
         "elmo": ["allennlp==1.5.0"],
-        "noising": ["unidecode"]
+        "noising": ["unidecode"],
+        "flask": ["flask_cors"]
     },
     keywords="transformer networks neuspell neural spelling correction embedding PyTorch NLP deep learning"
 )
