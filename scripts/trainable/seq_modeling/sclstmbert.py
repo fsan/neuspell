@@ -50,8 +50,8 @@ from helpers import untokenize, untokenize_without_unks, untokenize_without_unks
 from helpers import batch_accuracy_func
 
 from models import BertSCLSTM
-from pytorch_pretrained_bert import BertAdam
-from transformers import AdamW, get_linear_schedule_with_warmup
+from torch.optim import AdamW
+from transformers import get_linear_schedule_with_warmup
 
 from evals import get_metrics
 
@@ -395,7 +395,7 @@ if __name__=="__main__":
         ]
         t_total = int(len(train_data) / TRAIN_BATCH_SIZE / GRADIENT_ACC * N_EPOCHS)
         lr = 1e-4 # lr = 5e-5
-        optimizer = BertAdam(optimizer_grouped_parameters,lr=lr,warmup=0.1,t_total=t_total)    
+        optimizer = AdamW(optimizer_grouped_parameters, lr=lr, eps=1e-8)    
 
         # model to device
         model.to(DEVICE)
@@ -685,5 +685,5 @@ if __name__=="__main__":
         #     ls = [(o,n,p) if o==n==p else ("**"+o+"**","**"+n+"**","**"+p+"**")for o,n,p in zip(line["original"].split(),line["noised"].split(),line["predicted"].split())]
         #     x,y,z = map(list, zip(*ls))
         #     opfile.write(f'{line["id"]}\n{" ".join(x)}\n{" ".join(y)}\n{" ".join(z)}\n')
-        # opfile.close() 
+        # opfile.close()    
 

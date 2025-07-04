@@ -1,3 +1,6 @@
+# Note about this Fork
+This is a non-production ready of Neuspell running for newer python versions
+
 <h1 align="center">
 <p>NeuSpell: A Neural Spelling Correction Toolkit
 </h1>

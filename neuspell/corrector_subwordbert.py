@@ -4,7 +4,7 @@ from typing import List, Dict, Union
 
 import numpy as np
 import torch
-from pytorch_pretrained_bert import BertAdam
+from torch.optim import AdamW
 
 from .commons import DEFAULT_TRAINTEST_DATA_PATH
 from .corrector import Corrector
@@ -128,7 +128,7 @@ class BertChecker(Corrector):
         t_total = int(len(train_data) / TRAIN_BATCH_SIZE / GRADIENT_ACC * N_EPOCHS)
         if t_total == 0:
             t_total = 1
-        optimizer = BertAdam(optimizer_grouped_parameters, lr=5e-5, warmup=0.1, t_total=t_total)
+        optimizer = AdamW(optimizer_grouped_parameters, lr=5e-5, eps=1e-8)
 
         # model to device
         model.to(DEVICE)
