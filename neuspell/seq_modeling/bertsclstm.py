@@ -28,10 +28,10 @@ def load_pretrained(model, checkpoint_path, optimizer=None, device='cuda'):
     print(f"Loading model params from checkpoint dir: {checkpoint_path}")
 
     try:
-        checkpoint_data = torch.load(os.path.join(checkpoint_path, "pytorch_model.bin"), map_location=map_location)
+        checkpoint_data = torch.load(os.path.join(checkpoint_path, "pytorch_model.bin"), map_location=map_location, weights_only=False)
     except FileNotFoundError:
         download_pretrained_model(checkpoint_path)
-        checkpoint_data = torch.load(os.path.join(checkpoint_path, "pytorch_model.bin"), map_location=map_location)
+        checkpoint_data = torch.load(os.path.join(checkpoint_path, "pytorch_model.bin"), map_location=map_location, weights_only=False)
 
     model.load_state_dict(checkpoint_data)
 
@@ -44,7 +44,7 @@ def load_pretrained_large(model, checkpoint_path, optimizer=None, device='cuda')
     else:
         map_location = 'cpu'
     print(f"Loading model params from checkpoint dir: {checkpoint_path}")
-    checkpoint_data = torch.load(os.path.join(checkpoint_path, "model.pth.tar"), map_location=map_location)
+    checkpoint_data = torch.load(os.path.join(checkpoint_path, "model.pth.tar"), map_location=map_location, weights_only=False)
     # print(f"previously model saved at : {checkpoint_data['epoch_id']}")
 
     model.load_state_dict(checkpoint_data['model_state_dict'])

@@ -2,6 +2,7 @@
 # taken from this StackOverflow answer: https://stackoverflow.com/a/39225039
 
 import os
+import re
 
 import requests
 
@@ -17,6 +18,25 @@ def download_file_from_google_drive(id, destination):
     if token:
         params = {'id': id, 'confirm': token}
         response = session.get(URL, params=params, stream=True)
+
+    # Check if we got a virus scan warning page
+    if response.headers.get('content-type', '').startswith('text/html'):
+        html_content = response.text
+        
+        if 'Google Drive can\'t scan this file for viruses' in html_content:
+            uuid_match = re.search(r'name="uuid" value="([^"]+)"', html_content)
+            if uuid_match:
+                uuid = uuid_match.group(1)
+                download_url = f"https://drive.usercontent.google.com/download?id={id}&export=download&confirm=t&uuid={uuid}"
+                
+                response = session.get(download_url, stream=True)
+                
+                if response.headers.get('content-type', '').startswith('text/html'):
+                    authuser_match = re.search(r'name="authuser" value="([^"]*)"', html_content)
+                    authuser = authuser_match.group(1) if authuser_match else "0"
+                    
+                    download_url = f"https://drive.usercontent.google.com/download?id={id}&export=download&authuser={authuser}&confirm=t&uuid={uuid}"
+                    response = session.get(download_url, stream=True)
 
     save_response_content(response, destination)
 
