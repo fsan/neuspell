@@ -71,7 +71,7 @@ def load_pretrained(model, CHECKPOINT_PATH, optimizer=None, device='cuda'):
     else:
         map_location = 'cpu'
     print(f"Loading model params from checkpoint dir: {CHECKPOINT_PATH}")
-    checkpoint_data = torch.load(os.path.join(CHECKPOINT_PATH, "model.pth.tar"), map_location=map_location)
+    checkpoint_data = torch.load(os.path.join(CHECKPOINT_PATH, "model.pth.tar"), map_location=map_location, weights_only=False)
     # print(f"previously model saved at : {checkpoint_data['epoch_id']}")
 
     model.load_state_dict(checkpoint_data['model_state_dict'])
