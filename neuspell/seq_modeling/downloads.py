@@ -24,19 +24,27 @@ def download_file_from_google_drive(id, destination):
         html_content = response.text
         
         if 'Google Drive can\'t scan this file for viruses' in html_content:
-            uuid_match = re.search(r'name="uuid" value="([^"]+)"', html_content)
-            if uuid_match:
-                uuid = uuid_match.group(1)
-                download_url = f"https://drive.usercontent.google.com/download?id={id}&export=download&confirm=t&uuid={uuid}"
+            # Extract the form action URL
+            form_action_match = re.search(r'<form[^>]*action="([^"]*)"', html_content)
+            if form_action_match:
+                form_action = form_action_match.group(1)
                 
-                response = session.get(download_url, stream=True)
+                # Extract all hidden input parameters
+                params = {}
+                hidden_inputs = re.findall(r'<input[^>]*type="hidden"[^>]*name="([^"]*)"[^>]*value="([^"]*)"', html_content)
+                for name, value in hidden_inputs:
+                    params[name] = value
                 
+                # Make the confirmed download request
+                response = session.get(form_action, params=params, stream=True)
+                
+                # If still getting HTML, try alternative method
                 if response.headers.get('content-type', '').startswith('text/html'):
-                    authuser_match = re.search(r'name="authuser" value="([^"]*)"', html_content)
-                    authuser = authuser_match.group(1) if authuser_match else "0"
-                    
-                    download_url = f"https://drive.usercontent.google.com/download?id={id}&export=download&authuser={authuser}&confirm=t&uuid={uuid}"
-                    response = session.get(download_url, stream=True)
+                    # Try with direct download URL construction as fallback
+                    uuid = params.get('uuid', '')
+                    if uuid:
+                        download_url = f"https://drive.usercontent.google.com/download?id={id}&export=download&confirm=t&uuid={uuid}"
+                        response = session.get(download_url, stream=True)
 
     save_response_content(response, destination)
 
@@ -137,6 +145,8 @@ URL_MAPPINGS_FOR_REGULAR_FILES = {
         "vocab.pkl": "1DwQhYRUxBpGcjsVwfTPLhsFXUt-x00ib"
     }
 }
+
+
 
 CHECKPOINTS_NAMES = [*URL_MAPPINGS_FOR_REGULAR_FILES.keys()]
 

@@ -14,6 +14,18 @@ DEFAULT_TRAINTEST_DATA_PATH = os.path.join(DEFAULT_DATA_PATH, "traintest")
 
 ALLENNLP_ELMO_PRETRAINED_FOLDER = os.path.join(DEFAULT_DATA_PATH, "allennlp_elmo_pretrained")
 
+ARXIV_CHECKPOINTS = {
+    "bertscrnn-probwordnoise": f"{DEFAULT_DATA_PATH}/checkpoints/bertscrnn-probwordnoise",
+    "cnn-lstm-probwordnoise": f"{DEFAULT_DATA_PATH}/checkpoints/cnn-lstm-probwordnoise",
+    "elmoscrnn-probwordnoise": f"{DEFAULT_DATA_PATH}/checkpoints/elmoscrnn-probwordnoise",
+    "lstm-lstm-probwordnoise": f"{DEFAULT_DATA_PATH}/checkpoints/lstm-lstm-probwordnoise",
+    "scrnn-probwordnoise": f"{DEFAULT_DATA_PATH}/checkpoints/scrnn-probwordnoise",
+    "scrnnbert-probwordnoise": f"{DEFAULT_DATA_PATH}/checkpoints/scrnnbert-probwordnoise",
+    "scrnnelmo-probwordnoise": f"{DEFAULT_DATA_PATH}/checkpoints/scrnnelmo-probwordnoise",
+    "subwordbert-probwordnoise": f"{DEFAULT_DATA_PATH}/checkpoints/subwordbert-probwordnoise",
+}
+
+
 """ special tokenizers """
 
 _SPACY_TOKENIZER, _SPACY_TAGGER = None, None
