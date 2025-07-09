@@ -33,6 +33,13 @@ def load_pretrained(model, checkpoint_path, optimizer=None, device='cuda'):
         download_pretrained_model(checkpoint_path)
         checkpoint_data = torch.load(os.path.join(checkpoint_path, "pytorch_model.bin"), map_location=map_location, weights_only=False)
 
+    # Fix unable to load position_ids during load_state_dict
+    # References: 
+    #             https://github.com/NVIDIA/NeMo/issues/7070#issuecomment-1641432648
+    #             https://github.com/NVIDIA/NeMo/pull/7068/files
+    if "bert_model.embeddings.position_ids" in checkpoint_data:
+        del checkpoint_data["bert_model.embeddings.position_ids"]
+
     model.load_state_dict(checkpoint_data)
 
     return model
